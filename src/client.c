@@ -42,7 +42,7 @@ int main(){
     recv(sock, f.data, f.len, MSG_CMSG_CLOEXEC); 
     printf("name: %s\nlen: %ld\ndata: %s\n", f.name, f.len, f.data); 
 
-    FILE *fptr = fopen("test.jpeg", "wb");
+    FILE *fptr = fopen(f.name, "wb");
 
     fwrite(f.data, sizeof(char), f.len, fptr);
     fclose(fptr);
