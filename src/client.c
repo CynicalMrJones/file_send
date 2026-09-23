@@ -12,7 +12,7 @@ typedef struct {
     char* data;
 } file;
 
-int main(){
+int main(int argc, char **argv){
     int sock = 0;
     struct sockaddr_in serv_addr;
 
@@ -21,6 +21,10 @@ int main(){
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(8888);
 
+    if(inet_pton(AF_INET, argv[1], &serv_addr.sin_addr) <=0){
+        return -1;
+    }
+
 
     int conn = connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
     if(conn == 0){
@@ -28,6 +32,7 @@ int main(){
     }
     else{
         printf("Failed to connect\n");
+        exit(0);
     }
 
     //Not allocated properly
