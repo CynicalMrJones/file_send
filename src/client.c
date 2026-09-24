@@ -28,28 +28,38 @@ int main(int argc, char **argv){
 
     int conn = connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
     if(conn == 0){
-        printf("Connected\n");
+        // printf("Connected\n");
     }
     else{
-        printf("Failed to connect\n");
+        // printf("Failed to connect\n");
         exit(0);
     }
 
     //Not allocated properly
-    size_t length;
-    recv(sock, &length, sizeof(size_t), MSG_CMSG_CLOEXEC); 
+    size_t length = 388;
+    // recv(sock, &length, sizeof(size_t), MSG_CMSG_CLOEXEC); 
     file f = { 
         .name = malloc(length * sizeof(char)),
         .len = length,
-        .data = malloc(length* sizeof(char))
+        .data = malloc(length * sizeof(char))
     };
-    recv(sock, f.name, 200, MSG_CMSG_CLOEXEC); 
-    recv(sock, f.data, f.len, MSG_CMSG_CLOEXEC); 
-    printf("name: %s\nlen: %ld\ndata: %s\n", f.name, f.len, f.data); 
+    char buff[1000];
+    // recv(sock, f.name, 200, MSG_CMSG_CLOEXEC); 
+    int bytes;
+    while(1){
+        bytes = recv(sock, buff, 398, MSG_CMSG_CLOEXEC);
+        // printf("%d\n", bytes);
+        printf("%s", buff);
+        exit(0);
+    }
+    // recv(sock, buff, 388, MSG_CMSG_CLOEXEC); 
+    printf("data: %s\n", buff); 
 
-    FILE *fptr = fopen(f.name, "wb");
-
-    fwrite(f.data, sizeof(char), f.len, fptr);
-    fclose(fptr);
+    // FILE *fptr = fopen(f.name, "wb");
+    // FILE *fptr = fopen("test", "wb");
+    //
+    // // fwrite(f.data, sizeof(char), f.len, fptr);
+    // fwrite(buff, sizeof(char), 1000, fptr);
+    // fclose(fptr);
 
 }
