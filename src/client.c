@@ -5,12 +5,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
+#include "../lib/lib.h"
 
-typedef struct {
-    char* name;
-    size_t len;
-    char* data;
-} file;
 
 int main(int argc, char **argv){
     int sock = 0;
@@ -28,38 +24,35 @@ int main(int argc, char **argv){
 
     int conn = connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
     if(conn == 0){
-        // printf("Connected\n");
+        printf("Connected\n");
     }
     else{
-        // printf("Failed to connect\n");
+        printf("Failed to connect\n");
         exit(0);
     }
 
     //Not allocated properly
-    size_t length = 388;
-    // recv(sock, &length, sizeof(size_t), MSG_CMSG_CLOEXEC); 
-    file f = { 
-        .name = malloc(length * sizeof(char)),
-        .len = length,
-        .data = malloc(length * sizeof(char))
-    };
-    char buff[1000];
-    // recv(sock, f.name, 200, MSG_CMSG_CLOEXEC); 
-    int bytes;
-    while(1){
-        bytes = recv(sock, buff, 398, MSG_CMSG_CLOEXEC);
-        // printf("%d\n", bytes);
-        printf("%s", buff);
-        exit(0);
+    size_t size;
+
+    //TODO: I think the issue is here and need to check
+    recv(sock, &size, 8, 0);
+    unsigned char *buff = malloc(size * sizeof(unsigned char));
+    recv(sock, buff, size, 0);
+
+    //For printing the data
+    printf("Size: %ld\n", size);
+    for (int i = 0; i < size - 8; i++){
+        printf("%02x ", buff[i]);
     }
-    // recv(sock, buff, 388, MSG_CMSG_CLOEXEC); 
-    printf("data: %s\n", buff); 
+    printf("\n");
 
-    // FILE *fptr = fopen(f.name, "wb");
-    // FILE *fptr = fopen("test", "wb");
-    //
-    // // fwrite(f.data, sizeof(char), f.len, fptr);
-    // fwrite(buff, sizeof(char), 1000, fptr);
-    // fclose(fptr);
+    file test = de_dumb_ser(buff);
+    printf("name: %s\n", test.name);
+    printf("len: %ld\n", test.len);
+    printf("data: %s\n", test.data);
 
+    FILE *fptr = fopen("test.file", "wb");
+
+    fwrite(test.data, sizeof(char), test.len, fptr);
+    fclose(fptr);
 }
