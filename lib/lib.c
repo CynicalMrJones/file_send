@@ -15,8 +15,8 @@ typedef struct {
 // The idea  is to return a pointer that contains all the data of a file
 // Thought process:
 // First 8 bytes is the size of the whole package
-// Bytes 9-18 bytes are for file name (picked randomly)
-// Bytes 19-26 will be the length of the file
+// Bytes 9-18 (10) bytes are for file name (picked randomly)
+// Bytes 19-26 (8) will be the length of the file
 // Bytes 27-EOF will be the data in the file
 // Wish me luck
 unsigned char *dumb_ser(file fil){
@@ -46,7 +46,7 @@ unsigned char *dumb_ser(file fil){
  * Dumb Deserializer
  * Since it worked so well the last time lest do it again
  * First 10 bytes are for the filename (picked randomly)
- * Bytes 11-18 will be the length of the file
+ * Bytes 11-18 (8) will be the length of the file
  * Bytes 19-EOF will be the data in the file
  */
 file de_dumb_ser(unsigned char *ser){
