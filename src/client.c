@@ -31,27 +31,26 @@ int main(int argc, char **argv){
         exit(0);
     }
 
-    //Not allocated properly
     size_t size;
-
-    //TODO: I think the issue is here and need to check
     recv(sock, &size, 8, 0);
     unsigned char *buff = malloc(size * sizeof(unsigned char));
-    recv(sock, buff, size, 0);
-
-    //For printing the data
-    printf("Size: %ld\n", size);
-    for (int i = 0; i < size - 8; i++){
-        printf("%02x ", buff[i]);
+    int bytes_recv = 0;
+    int total = 0;
+    while (total < size){
+        bytes_recv = recv(sock, buff + total, size - total, 0);
+        total += bytes_recv;
+        if (bytes_recv == 0){
+            break;
+        }
     }
-    printf("\n");
 
     file test = de_dumb_ser(buff);
-    printf("name: %s\n", test.name);
-    printf("len: %ld\n", test.len);
-    printf("data: %s\n", test.data);
 
-    FILE *fptr = fopen("test.file", "wb");
+    FILE *fptr = fopen(test.name, "wb");
+    if (fptr == NULL){
+        printf("Could not open file\n");
+        exit(-1);
+    }
 
     fwrite(test.data, sizeof(char), test.len, fptr);
     fclose(fptr);

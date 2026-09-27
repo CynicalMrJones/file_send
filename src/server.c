@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <netinet/in.h>
+#include <unistd.h>
 #include "../lib/lib.h"
 
 
@@ -29,21 +30,28 @@ int main(int argc, char **argv){
     }
 
     file test = read_file(argv[1]);
+    printf("Length of file in the server %ld\n", test.len);
+
     unsigned char *meme = dumb_ser(test);
-    size_t size = strlen(test.name) + sizeof(test.len) + strlen(test.data);
+    size_t size = 8 + 10 + 8 + test.len;
 
     while(1){
         struct sockaddr_in client_address;
         socklen_t client_len = sizeof(client_address);
-        int acc = accept(socketfd, (struct sockaddr*)&address, &client_len);
+        int acc = accept(socketfd, (struct sockaddr*)&client_address, &client_len);
 
         int bytes_sent = 0;
         int sent = 0;
         while(bytes_sent < size){
-            sent = send(acc, meme, size, MSG_CONFIRM);
+            sent = send(acc, meme + bytes_sent, size - bytes_sent, 0);
             printf("Sending\n");
+            if (sent == 0){
+                break;
+            }
             bytes_sent += sent;
+            printf("Sent: %d\n", sent);
         }
         printf("Done sending\n");
+        close(acc);
     }
 }
