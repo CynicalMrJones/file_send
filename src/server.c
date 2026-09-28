@@ -33,7 +33,8 @@ int main(int argc, char **argv){
     printf("Length of file in the server %ld\n", test.len);
 
     unsigned char *meme = dumb_ser(test);
-    size_t size = 8 + 10 + 8 + test.len;
+    //TODO: This should not be a magic number
+    size_t size = 8 + 100 + 8 + test.len;
 
     while(1){
         struct sockaddr_in client_address;
