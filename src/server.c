@@ -29,12 +29,12 @@ int main(int argc, char **argv){
         printf("Connection established\n"); 
     }
 
-    file test = read_file(argv[1]);
-    printf("Length of file in the server %ld\n", test.len);
+    file f = read_file(argv[1]);
+    printf("Length of file in the server %ld\n", f.len);
 
-    unsigned char *meme = dumb_ser(test);
+    unsigned char *meme = dumb_ser(f);
     //TODO: This should not be a magic number
-    size_t size = 8 + 100 + 8 + test.len;
+    size_t size = 8 + 100 + 8 + f.len;
 
     while(1){
         struct sockaddr_in client_address;

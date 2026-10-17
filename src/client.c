@@ -44,14 +44,14 @@ int main(int argc, char **argv){
         }
     }
 
-    file test = de_dumb_ser(buff);
+    file f = de_dumb_ser(buff);
 
-    FILE *fptr = fopen(test.name, "wb");
+    FILE *fptr = fopen(f.name, "wb");
     if (fptr == NULL){
         printf("Could not open file\n");
         exit(-1);
     }
 
-    fwrite(test.data, sizeof(char), test.len, fptr);
+    fwrite(f.data, sizeof(char), f.len, fptr);
     fclose(fptr);
 }
