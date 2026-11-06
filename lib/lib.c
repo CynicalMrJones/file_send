@@ -82,7 +82,7 @@ file read_file(char *path){
     file file= {
         .name = path,
         .len = size,
-        .data = malloc(size * sizeof(char))
+        .data = malloc(size * sizeof(unsigned char))
     };
 
     fread(file.data, 1, file.len, f);
