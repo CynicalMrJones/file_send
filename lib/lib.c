@@ -61,7 +61,8 @@ file de_dumb_ser(unsigned char *ser){
     return de_ser;
 }
 
-void print_ordered_bytes(unsigned char* print, size_t len){
+//Testing purposes
+void print_ordered_bytes(unsigned char* print, int len){
     for (int i = 0; i < len; i++) {
         printf("%02x ", print[i]);
     }
