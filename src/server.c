@@ -7,6 +7,9 @@
 
 
 int main(int argc, char **argv){
+    if (argc < 1){
+        printf("Need to provide file as argument\n");
+    }
     int socketfd = socket(AF_INET, SOCK_STREAM, 0);
 
     //creating an address space
@@ -34,7 +37,7 @@ int main(int argc, char **argv){
 
     unsigned char *meme = dumb_ser(f);
     //TODO: This should not be a magic number
-    size_t size = 8 + 100 + 8 + f.len;
+    int size = 8 + 100 + 8 + f.len;
 
     while(1){
         struct sockaddr_in client_address;

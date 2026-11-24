@@ -9,6 +9,11 @@
 
 
 int main(int argc, char **argv){
+
+    if (argc > 0){
+        printf("No arguments\n");
+    }
+
     int sock = 0;
     struct sockaddr_in serv_addr;
 
@@ -31,7 +36,7 @@ int main(int argc, char **argv){
         exit(0);
     }
 
-    size_t size;
+    int size;
     recv(sock, &size, 8, 0);
     unsigned char *buff = malloc(size * sizeof(unsigned char));
     int bytes_recv = 0;
