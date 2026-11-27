@@ -35,7 +35,7 @@ int main(int argc, char **argv){
     file f = read_file(argv[1]);
     printf("Length of file in the server %ld\n", f.len);
 
-    unsigned char *meme = dumb_ser(f);
+    unsigned char *ser = dumb_ser(f);
     //TODO: This should not be a magic number
     int size = 8 + 100 + 8 + f.len;
 
@@ -47,7 +47,7 @@ int main(int argc, char **argv){
         int bytes_sent = 0;
         int sent = 0;
         while(bytes_sent < size){
-            sent = send(acc, meme + bytes_sent, size - bytes_sent, 0);
+            sent = send(acc, ser + bytes_sent, size - bytes_sent, 0);
             printf("Sending\n");
             if (sent == 0){
                 break;
