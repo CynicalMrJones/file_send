@@ -38,20 +38,21 @@ unsigned char *dumb_ser(file fil){
 /*
  * Dumb Deserializer
  * Since it worked so well the last time lest do it again
- * First 100 bytes are for the filename (picked randomly)
- * Bytes 101-108 (8) will be the length of the file
- * Bytes 108-EOF will be the data in the file
+ * First 0-8 are the size of the whole package
+ * First 8-108 bytes are for the filename (picked randomly)
+ * Bytes 108-116 (8) will be the length of the file
+ * Bytes 116-EOF will be the data in the file
  */
 file de_dumb_ser(unsigned char *ser){
     //Break the data into name
     char *name = malloc(100 * sizeof(char));
-    memcpy(name, ser, 100);
+    memcpy(name, ser + 8, 100);
     //Break the data into len
     size_t len;
-    memcpy(&len, ser + 100, 8);
+    memcpy(&len, ser + 108, 8);
     //Break the data into...data 
     char *data = malloc(len * sizeof(char));
-    memcpy(data, ser + 108, len);
+    memcpy(data, ser + 116, len);
 
     file de_ser = {
         .name = name,
